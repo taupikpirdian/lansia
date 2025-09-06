@@ -17,6 +17,11 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RolesSeeder::class,
             UserSeeder::class,
+            AgamaSeeder::class,
+            StatusNikahSeeder::class,
+            KategoriSeeder::class,
+            KondisiSeeder::class,
+            PengampuSeeder::class,
         ]);
     }
 }

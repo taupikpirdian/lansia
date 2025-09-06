@@ -1,62 +1,107 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SATSET</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Pendataan Lansia Desa</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+      }
+      .login-container {
+        display: flex;
+        height: 100vh;
+      }
+      .login-left {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .login-right {
+        flex: 1;
+        background-color: #7C3AED; /* ungu */
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .login-card {
+        max-width: 400px;
+        width: 100%;
+        margin: auto;
+      }
+      .btn-google {
+        border: 1px solid #ccc;
+        background-color: #fff;
+      }
+      .btn-google img {
+        height: 20px;
+        margin-right: 8px;
+      }
+      .form-check-label {
+        font-size: 0.9rem;
+      }
+      @media (max-width: 768px) {
+        .login-container {
+          flex-direction: column;
+        }
+        .login-right {
+          display: none; /* hide gambar di mobile */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- Left Side -->
+      <div class="login-left">
+        <div class="login-card">
+          <!-- Logo Desa (opsional ganti sesuai kebutuhan) -->
+          <h4 class="mb-4 fw-bold">Pendataan Lansia Desa</h4>
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-</head>
+          <h2 class="mb-2">Selamat Datang Kembali</h2>
+          <p class="text-muted mb-4">Silakan login untuk melanjutkan</p>
 
-<body class="bg-dark text-light">
+          @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Login Gagal!<br></strong> Periksa kembali username dan password Anda.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
 
-<div class="container py-5 text-center" id="login-section">
-  <!-- Header -->
-  <h5 class="fw-bold">SISTEM AKSES TERINTEGRASI SECARA CEPAT <br/>FEEDBACK HASIL RIKKES</h5>
+          <!-- Form -->
+          <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="login" placeholder="Masukkan username" required>
+            </div>
 
-  <!-- Logo -->
-  <img src="{{ asset('assets/images/logo/logo.png') }}" class="my-4" style="width:180px;" alt="Logo DOKKES">
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
+            </div>
 
-  <h3 class="fw-bold">SATSET</h3>
-
-  <!-- Login Card -->
-  <div class="card mx-auto mt-4" style="max-width:430px;">
-    <div class="card-body">
-      @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <i class="bi bi-exclamation-triangle-fill me-2"></i>
-          <strong>Login Gagal!</strong> Periksa kembali email dan password Anda.
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Masuk</button>
+          </form>
         </div>
-      @endif
-      
-      <form method="POST" action="{{ route('login') }}">
-        @csrf
-        <div class="mb-3 input-group">
-          <span class="input-group-text"><i class="bi bi-person"></i></span>
-          <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-            value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Masukkan email Anda">
+      </div>
+
+      <!-- Right Side -->
+      <div class="login-right">
+        <div class="text-center">
+          <!-- Ilustrasi bisa diganti dengan SVG sendiri -->
+          <img src="{{ asset('assets/images/login/2.webp') }}" alt="Ilustrasi Login" class="img-fluid" style="max-width: 80%;">
         </div>
-        <div class="mb-3 input-group">
-          <span class="input-group-text"><i class="bi bi-key"></i></span>
-          <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password"
-            required autocomplete="current-password" placeholder="Masukkan password Anda">
-        </div>
-        <button type="submit" class="btn btn-warning w-100">Login</button>
-        <a type="button" href="/" class="btn btn-danger w-100 mt-3">Halaman Cek Pemeriksaan</a>
-      </form>
+      </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <p class="position-fixed bottom-0 start-50 translate-middle-x mb-2 small text-light">
-    Copyright © KESMAPTA DOKKES POLRI All right reserved | Version :
-  </p>
-</div>
-
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
