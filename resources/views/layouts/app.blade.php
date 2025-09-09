@@ -34,7 +34,7 @@
       font-weight: bold;
     }
     .content-section {
-      padding: 2rem;
+      /* padding: 2rem; */
     }
     footer {
       background-color: #f8f9fa;
@@ -110,9 +110,7 @@
 
   <!-- Main Content -->
   <section class="content-section bg-white">
-    <div class="container">
       @yield('content')
-    </div>
   </section>
 
   <!-- Footer -->

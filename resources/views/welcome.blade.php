@@ -12,7 +12,7 @@
         <div class="carousel-inner">
             @foreach($sliders as $key => $slider)
             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                <img src="{{ url('file/sliders/' . $slider->image) }}" class="d-block w-100" alt="{{ $slider->name }}" style="height:500px; object-fit:cover;">
+                <img src="{{ url('file/sliders/' . $slider->image) }}" class="d-block w-100" alt="{{ $slider->name }}" style="height:650px; object-fit:cover;">
                 @if($slider->name || $slider->description)
                 <div class="carousel-caption d-none d-md-block" style="background-color: rgba(0,0,0,0.5); padding: 20px;">
                     @if($slider->name) <h2>{{ $slider->name }}</h2> @endif
