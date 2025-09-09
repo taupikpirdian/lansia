@@ -43,6 +43,14 @@
               <p>User</p>
             </a>
           </li>
+
+          <li class="nav-header">Setting</li>
+          <li class="nav-item">
+            <a href="{{ route('dashboard.slider.index') }}" class="nav-link">
+              <i class="nav-icon bi bi-image"></i>
+              <p>Slider</p>
+            </a>
+          </li>
           @endif
           <li class="nav-header">Biodata</li>
           <li class="nav-item">

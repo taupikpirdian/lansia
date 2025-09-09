@@ -313,7 +313,7 @@ class LansiaController extends Controller
                     ->with('error', 'Data tidak bisa diupdate karena sudah memiliki minimal 1 approval.');
             }
             // status != disetujui
-            if ($data->status == 'disetujui') {
+            if ($biodata->status == 'disetujui') {
                 return redirect()->back()
                     ->with('error', 'Data tidak bisa diupdate karena sudah disetujui.');
             }

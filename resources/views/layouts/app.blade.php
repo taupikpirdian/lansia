@@ -158,6 +158,6 @@
     </div>
   </footer>
 
-  <script src="public/vendor/bootstrap-5.3.0/bootstrap.bundle.min.js"></script>
+  <script src="{{ asset('vendor/bootstrap-5.3.0/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

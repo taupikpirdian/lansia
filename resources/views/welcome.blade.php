@@ -3,20 +3,24 @@
 @section('content')
 <!-- Hero Section with Slider -->
 <div class="container-fluid p-0">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            @foreach($sliders as $key => $slider)
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}"></button>
+            @endforeach
         </div>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ asset('assets/images/slider/1.jpg') }}" class="d-block w-100" alt="Pemerintah Daerah" style="height: 500px; object-fit: cover;">
+            @foreach($sliders as $key => $slider)
+            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                <img src="{{ url('file/sliders/' . $slider->image) }}" class="d-block w-100" alt="{{ $slider->name }}" style="height:500px; object-fit:cover;">
+                @if($slider->name || $slider->description)
                 <div class="carousel-caption d-none d-md-block" style="background-color: rgba(0,0,0,0.5); padding: 20px;">
-                    <h2>Pendataan Lansia Desa</h2>
-                    <p>Program pendataan warga lanjut usia untuk meningkatkan kesejahteraan dan pelayanan</p>
+                    @if($slider->name) <h2>{{ $slider->name }}</h2> @endif
+                    @if($slider->description) <p>{{ $slider->description }}</p> @endif
                 </div>
+                @endif
             </div>
+            @endforeach
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -26,7 +30,7 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
-    </div>
+    </div>      
 </div>
 
 <!-- Main Content -->

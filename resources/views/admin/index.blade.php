@@ -23,7 +23,7 @@
     <div class="col-lg-3 col-6">
       <div class="small-box text-bg-primary">
         <div class="inner">
-          <h3>11</h3>
+          <h3>{{ $countUsers }}</h3>
           <p>Total Penduduk Terdaftar</p>
         </div>
         <i class="bi bi-people small-box-icon"></i>
@@ -32,7 +32,7 @@
     <div class="col-lg-3 col-6">
       <div class="small-box text-bg-success">
         <div class="inner">
-          <h3>2</h3>
+          <h3>{{ $countEligible }}</h3>
           <p>Penduduk Eligible</p>
         </div>
         <i class="bi bi-check-circle small-box-icon"></i>
@@ -41,7 +41,7 @@
     <div class="col-lg-3 col-6">
       <div class="small-box text-bg-warning">
         <div class="inner">
-          <h3>3</h3>
+          <h3>{{ $countDesa }}</h3>
           <p>Total Desa</p>
         </div>
         <i class="bi bi-geo small-box-icon"></i>
@@ -50,7 +50,7 @@
     <div class="col-lg-3 col-6">
       <div class="small-box text-bg-danger">
         <div class="inner">
-          <h3>3</h3>
+          <h3>{{ $countKategoriKhusus }}</h3>
           <p>Kategori Khusus (Lansia/Disabilitas)</p>
         </div>
         <i class="bi bi-person-wheelchair small-box-icon"></i>
@@ -111,7 +111,12 @@
               <tr><th>Nama</th><th>Jumlah Penduduk</th></tr>
             </thead>
             <tbody>
-              
+              @foreach($topDesa as $item)
+                <tr>
+                  <td>{{ $item['label'] }}</td>
+                  <td>{{ $item['total'] }}</td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
@@ -144,127 +149,21 @@
     integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
     crossorigin="anonymous"
 ></script>
-<!-- ChartJS -->
-<script>
-    // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
-    // IT'S ALL JUST JUNK FOR DEMO
-    // ++++++++++++++++++++++++++++++++++++++++++
-
-    const sales_chart_options = {
-    series: [
-        {
-        name: 'Digital Goods',
-        data: [28, 48, 40, 19, 86, 27, 90],
-        },
-        {
-        name: 'Electronics',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        },
-    ],
-    chart: {
-        height: 300,
-        type: 'area',
-        toolbar: {
-        show: false,
-        },
-    },
-    legend: {
-        show: false,
-    },
-    colors: ['#0d6efd', '#20c997'],
-    dataLabels: {
-        enabled: false,
-    },
-    stroke: {
-        curve: 'smooth',
-    },
-    xaxis: {
-        type: 'datetime',
-        categories: [
-        '2023-01-01',
-        '2023-02-01',
-        '2023-03-01',
-        '2023-04-01',
-        '2023-05-01',
-        '2023-06-01',
-        '2023-07-01',
-        ],
-    },
-    tooltip: {
-        x: {
-        format: 'MMMM yyyy',
-        },
-    },
-    };
-
-    const sales_chart = new ApexCharts(
-    document.querySelector('#revenue-chart'),
-    sales_chart_options,
-    );
-    sales_chart.render();
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // ==== Data Dummy ====
-  const dataJenisKelamin = { "Laki-laki": 2700, "Perempuan": 2530 };
-  const dataAgama        = [
-    {label: "Islam", total: 4000}, 
-    {label: "Kristen", total: 800}, 
-    {label: "Hindu", total: 200}, 
-    {label: "Buddha", total: 150}, 
-    {label: "Lainnya", total: 80}
-  ];
-  const dataStatusNikah  = [
-    {label: "Belum Menikah", total: 1800}, 
-    {label: "Menikah", total: 3000}, 
-    {label: "Cerai", total: 200}, 
-    {label: "Cerai Mati", total: 230}
-  ];
-  const dataKategori     = [
-    {label: "Miskin", total: 500}, 
-    {label: "Disabilitas", total: 120}, 
-    {label: "Lansia", total: 300}, 
-    {label: "Lainnya", total: 100}
-  ];
-  const dataKecamatan    = [
-    {label: "Kec. A", total: 1200}, 
-    {label: "Kec. B", total: 1500}, 
-    {label: "Kec. C", total: 800}, 
-    {label: "Kec. D", total: 900}, 
-    {label: "Kec. E", total: 830}
-  ];
-  const dataDesa         = [
-    {label: "Desa 1", total: 400}, 
-    {label: "Desa 2", total: 520}, 
-    {label: "Desa 3", total: 600}, 
-    {label: "Desa 4", total: 700}, 
-    {label: "Desa 5", total: 350}
-  ];
-  const dataKondisi      = [
-    {label: "Sehat", total: 4300}, 
-    {label: "Sakit", total: 700}, 
-    {label: "Disabilitas", total: 230}
-  ];
-  const dataPengampu     = [
-    {label: "Orang Tua", total: 3000}, 
-    {label: "Saudara", total: 800}, 
-    {label: "Lembaga", total: 200}, 
-    {label: "Mandiri", total: 1230}
-  ];
-  const dataKelahiran    = [
-    {label: "2019", total: 120}, 
-    {label: "2020", total: 150}, 
-    {label: "2021", total: 180}, 
-    {label: "2022", total: 170}, 
-    {label: "2023", total: 190}
-  ];
-  const dataKelompokUmur = [
-    {label: "0-17 (Anak)", total: 1800}, 
-    {label: "18-59 (Dewasa)", total: 2800}, 
-    {label: "60+ (Lansia)", total: 630}
-  ];
+  const countLk = @json($countLakiLaki);
+  const countPr = @json($countPerempuan);
+  const dataStatusNikah = @json($dataStatusNikah);
+  const dataKategori    = @json($dataKategori);
+  const dataAgama        = @json($dataAgama);
+  const dataKondisi      = @json($dataKondisi);
+  const dataPengampu     = @json($dataPengampu);
+  const dataKecamatan    = @json($dataKecamatan);
+  const dataDesa         = @json($dataDesa);
 
+  // ==== Data Dummy ====
+  const dataJenisKelamin = { "Laki-laki": countLk, "Perempuan": countPr };
   // ==== Chart Rendering ====
   new Chart(document.getElementById('chartJenisKelamin'), {
     type: 'pie',
