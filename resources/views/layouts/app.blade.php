@@ -41,19 +41,68 @@
       padding: 1.5rem;
     }
   </style>
+
+  <style>
+    .navbar {
+      background: linear-gradient(90deg, #212529, #343a40, #212529);
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: scale(1.05);
+      color: #dc3545 !important; /* merah bootstrap */
+    }
+
+    .nav-link {
+      position: relative;
+      margin: 0 8px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background-color: #dc3545; /* garis underline merah */
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    .nav-link:hover {
+      color: #dc3545 !important; /* teks merah */
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">IKET DALANG</a>
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="bi bi-heart-pulse-fill text-danger" style="font-size: 2rem;"></i> IKET DALANG
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link {{ request()->is('/dashboard') ? 'active' : '' }}" href="/dashboard">Dashboard</a></li>
+          <li class="nav-item">
+            <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">Dashboard</a>
+          </li>
         </ul>
       </div>
     </div>

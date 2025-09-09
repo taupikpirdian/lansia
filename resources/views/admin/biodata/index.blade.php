@@ -34,9 +34,11 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <h3 class="card-title m-0">Data Iket Dalang</h3>
-                <a href="{{ route('dashboard.biodata.create') }}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </a>
+                @if (Auth::user()->roles[0]->name == 'admin' || Auth::user()->roles[0]->name == 'operator-desa')
+                    <a href="{{ route('dashboard.biodata.create') }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Data
+                    </a>
+                @endif
             </div>
         </div>
         <div class="card-body">
@@ -49,20 +51,19 @@
                 <th>Tempat Lahir</th>
                 <th>Tanggal Lahir</th>
                 <th>JK</th>
-                <th>Usia (tahun)</th>
                 <th>Agama</th>
                 <th>Status Nikah</th>
                 <th>Kategori</th>
                 <th>Kondisi</th>
                 <th>Pengampu</th>
                 <th>Approved (2)</th>
+                <th>Status</th>
+                <th>Dibuat</th>
                 <th>Aksi</th>
             </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colspan="14" class="text-center">Tidak ada data</td>
-                </tr>
+                
             </tbody>
         </table>
         </div>  
@@ -72,8 +73,81 @@
 @endsection
 @section('scripts')
 <script>
-    $(document).ready(function () {
-    //   $('#example').DataTable();
+    var dataTable = $("#example").DataTable({
+        //   "scrollX": true,
+          processing: true,
+          serverSide: true,
+          autoWidth: true,
+          orderCellsTop: true,
+          fixedHeader: true,
+          scrollX: true,
+          fixedColumns: {
+              right: 1,
+              left: 0,
+          },
+          ajax: "{{ route('dashboard.biodata.datatable') }}",
+          columns: [
+              {
+                  data: 'DT_RowIndex',
+                  orderable: false
+              },
+              {
+                  data: 'no_kk',
+                  name: 'no_kk'
+              },
+              {
+                  data: 'nama',
+                  name: 'nama'
+              },
+              {
+                  data: 'tempat_lahir',
+                  name: 'tempat_lahir'
+              },
+              {
+                  data: 'tanggal_lahir',
+                  name: 'tanggal_lahir'
+              },
+              {
+                  data: 'jk',
+                  name: 'jk'
+              },
+              {
+                  data: 'agama',
+                  name: 'agama'
+              },
+              {
+                  data: 'status_nikah',
+                  name: 'status_nikah'
+              },
+              {
+                  data: 'kategori',
+                  name: 'kategori'
+              },
+              {
+                  data: 'kondisi',
+                  name: 'kondisi'
+              },
+              {
+                  data: 'pengampu',
+                  name: 'pengampu'
+              },
+              {
+                  data: 'approved',
+                  name: 'approved'
+              },
+              {
+                  data: 'status',
+                  name: 'status'
+              },
+              {
+                  data: 'created_at',
+                  name: 'created_at'
+              },
+              {
+                  data: 'action',
+                  orderable: false
+              }
+          ]
     });
 
     function destroy(id) {
@@ -93,6 +167,80 @@
         }).catch((xhr) => {
             alert('Error: ' + xhr.responseText);
         })
+    }
+
+    function approveData(id) {
+        Swal.fire({
+            title: 'Approve Data',
+            input: 'text', // tipe input: text
+            inputLabel: 'Masukkan catatan (opsional)',
+            inputPlaceholder: 'Tulis catatan di sini...',
+            showCancelButton: true,
+            confirmButtonText: 'Approve',
+            cancelButtonText: 'Batal',
+            preConfirm: (note) => {
+                // kirim ajax hanya jika user klik approve
+                var url = "{{ route('dashboard.biodata.approve', ':id') }}".replace(':id', id);
+                return callDataWithAjax(url, 'POST', {
+                    _method: "POST",
+                    note: note // kirim note ke server
+                }).then((data) => {
+                    return data;
+                }).catch((xhr) => {
+                    Swal.showValidationMessage(`Request failed: ${xhr.responseText}`);
+                });
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data berhasil di approve',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        });
+    }
+
+    function rejectData(id) {
+        Swal.fire({
+            title: 'Reject Data',
+            input: 'textarea', // gunakan textarea supaya bisa panjang
+            inputLabel: 'Masukkan catatan',
+            inputPlaceholder: 'Tulis catatan di sini...',
+            showCancelButton: true,
+            confirmButtonText: 'Reject',
+            cancelButtonText: 'Batal',
+            preConfirm: (note) => {
+                if (!note || note.trim() === '') {
+                    Swal.showValidationMessage('Catatan wajib diisi!');
+                    return false; // mencegah Swal ditutup
+                }
+
+                var url = "{{ route('dashboard.biodata.reject', ':id') }}".replace(':id', id);
+                return callDataWithAjax(url, 'POST', {
+                    _method: "POST",
+                    note: note.trim() // kirim note ke server
+                }).then((data) => {
+                    return data;
+                }).catch((xhr) => {
+                    Swal.showValidationMessage(`Request failed: ${xhr.responseText}`);
+                });
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data berhasil di reject',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        });
     }
 </script>
 @endsection

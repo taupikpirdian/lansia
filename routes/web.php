@@ -33,13 +33,17 @@ Route::middleware(['auth'])->group(
 
             Route::name('biodata.')->prefix('biodata')->group(function () {
                 Route::controller(LansiaController::class)->group(function () {
+                    Route::get('/get-desa/{kecamatan_id}', 'getDesa')->name('get-desa');
                     Route::get('/', 'index')->name('index');
+                    Route::get('/datatable', 'datatable')->name('datatable');
                     Route::get('/create', 'create')->name('create');
                     Route::post('/store', 'store')->name('store');
                     Route::get('/{id}/edit', 'edit')->name('edit');
                     Route::put('/{id}', 'update')->name('update');
                     Route::delete('/{id}', 'destroy')->name('destroy');
                     Route::get('/{id}', 'show')->name('show');
+                    Route::post('/{id}/reject', 'reject')->name('reject');
+                    Route::post('/{id}/approve', 'approve')->name('approve');
                 });
             });
         });

@@ -6,6 +6,7 @@
     <title>Login Pendataan Lansia Desa</title>
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
       body {
         height: 100vh;
@@ -24,7 +25,7 @@
       }
       .login-right {
         flex: 1;
-        background-color: #7C3AED; /* ungu */
+        background: linear-gradient(135deg, #e57373, #c62828);
         color: #fff;
         display: flex;
         align-items: center;
@@ -35,13 +36,23 @@
         width: 100%;
         margin: auto;
       }
-      .btn-google {
-        border: 1px solid #ccc;
-        background-color: #fff;
+      .btn-primary {
+        background-color: #e57373;
+        border-color: #e57373;
+        transition: all 0.3s ease;
       }
-      .btn-google img {
-        height: 20px;
-        margin-right: 8px;
+      .btn-primary:hover {
+        background-color: #c62828;
+        border-color: #c62828;
+      }
+      .btn-outline-secondary:hover {
+        background-color: #e57373;
+        border-color: #e57373;
+        color: #fff;
+      }
+      .form-control:focus {
+        border-color: #e57373;
+        box-shadow: 0 0 0 0.25rem rgba(229, 115, 115, 0.4);
       }
       .form-check-label {
         font-size: 0.9rem;
@@ -61,8 +72,7 @@
       <!-- Left Side -->
       <div class="login-left">
         <div class="login-card">
-          <!-- Logo Desa (opsional ganti sesuai kebutuhan) -->
-          <h4 class="mb-4 fw-bold">Pendataan Lansia Desa</h4>
+          <h4 class="mb-4 fw-bold text-danger" style="color:#e57373 !important;">Pendataan Lansia Desa</h4>
 
           <h2 class="mb-2">Selamat Datang Kembali</h2>
           <p class="text-muted mb-4">Silakan login untuk melanjutkan</p>
@@ -103,7 +113,6 @@
       <!-- Right Side -->
       <div class="login-right">
         <div class="text-center">
-          <!-- Ilustrasi bisa diganti dengan SVG sendiri -->
           <img src="{{ asset('assets/images/login/2.webp') }}" alt="Ilustrasi Login" class="img-fluid" style="max-width: 80%;">
         </div>
       </div>

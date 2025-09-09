@@ -19,7 +19,7 @@ class PengampuSeeder extends Seeder
             'name' => 'Keluarga',
         ]);
         \App\Models\Pengampu::create([
-            'name' => 'Family Lain',
+            'name' => 'Keluarga Lain',
         ]);
     }
 }

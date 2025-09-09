@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
-                        <input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir', $data->tanggal_lahir ?? '') }}" required>
+                        <input type="date" name="tanggal_lahir" class="form-control datepicker" value="{{ old('tanggal_lahir', $data->tanggal_lahir ?? '') }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
@@ -83,13 +83,18 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Kecamatan <span class="text-danger">*</span></label>
-                        <select name="kondisi_id" class="form-select" required>
+                        <select name="kecamatan_id" class="form-select select2" required>
                             <option value="">-- Pilih Kecamatan --</option>
+                            @foreach($kecamatans as $kecamatan)
+                                <option value="{{ $kecamatan->id }}" {{ old('kecamatan_id', $data->kecamatan_id ?? '') == $kecamatan->id ? 'selected' : '' }}>
+                                    {{ $kecamatan->nama }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Desa <span class="text-danger">*</span></label>
-                        <select name="pengampu_id" class="form-select" required>
+                        <select name="desa_id" class="form-select select2" required>
                             <option value="">-- Pilih Desa --</option>
                         </select>
                     </div>
@@ -155,4 +160,47 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        let kecamatanId = $('select[name="kecamatan_id"]').val();
+        let desaId = "{{ old('desa_id', $data->desa_id ?? '') }}";
+
+        if(kecamatanId) {
+            $.ajax({
+                url: '/dashboard/biodata/get-desa/' + kecamatanId,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    let desaSelect = $('select[name="desa_id"]');
+                    desaSelect.empty();
+                    $.each(data, function(key, value) {
+                        let selected = value.id == desaId ? 'selected' : '';
+                        desaSelect.append('<option value="' + value.id + '" ' + selected + '>' + value.nama + '</option>');
+                    });
+                }
+            });
+        }
+        // options desa dependent to kecamatan
+        $(document).on('change', 'select[name="kecamatan_id"]', function() {
+            console.log("masuk")
+            var kecamatanId = $(this).val();
+            if (kecamatanId) {
+                $.ajax({
+                    url: '/dashboard/biodata/get-desa/' + kecamatanId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('select[name="desa_id"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="desa_id"]').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('select[name="desa_id"]').empty();
+            }
+        });
+    </script>
 @endsection
