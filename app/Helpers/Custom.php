@@ -185,3 +185,14 @@ if (!function_exists('backtraceLog')) {
         ]);
     }
 }
+
+function getKodeWilayah($kodeWilayah): array
+{
+    $kode = (string) $kodeWilayah;
+    return [
+        'kode_prov' => substr($kode, 0, 2),   // LEFT 2
+        'kode_kab'  => substr($kode, 2, 2),   // MID mulai index 2, ambil 2
+        'kode_kec'  => substr($kode, 4, 3),   // MID mulai index 4, ambil 3
+        'kode_desa' => substr($kode, -3),     // RIGHT 3
+    ];
+}

@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LansiaController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\admin\UsersController;
-use App\Http\Controllers\admin\MedicalCheckController;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
 
@@ -31,8 +31,8 @@ Route::middleware(['auth'])->group(
                 Route::get('/users/{id}', 'show')->name('users.show');
             });
 
-            Route::name('medical.')->prefix('medical')->group(function () {
-                Route::controller(MedicalCheckController::class)->group(function () {
+            Route::name('biodata.')->prefix('biodata')->group(function () {
+                Route::controller(LansiaController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::get('/create', 'create')->name('create');
                     Route::post('/store', 'store')->name('store');

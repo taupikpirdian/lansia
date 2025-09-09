@@ -20,5 +20,7 @@ class Biodata extends Model
         'kondisi_id',
         'pengampu_id',
         'created_by',
+        'kecamatan_id',
+        'desa_id',
     ];
 }

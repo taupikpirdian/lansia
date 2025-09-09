@@ -4,11 +4,11 @@
       <!--begin::Brand Link-->
       <a href="./index.html" class="brand-link">
         <!--begin::Brand Image-->
-        <img
+        {{-- <img
           src="{{ asset('assets/images/logo/logo.png') }}"
           alt="AdminLTE Logo"
           class="brand-image opacity-75 shadow"
-        />
+        /> --}}
         <!--end::Brand Image-->
         <!--begin::Brand Text-->
         <span class="brand-text fw-light">Dashboard</span>
@@ -44,11 +44,11 @@
             </a>
           </li>
           @endif
-          <li class="nav-header">Medical Check</li>
+          <li class="nav-header">Biodata</li>
           <li class="nav-item">
-            <a href="{{ route('dashboard.medical.index') }}" class="nav-link">
+            <a href="{{ route('dashboard.biodata.index') }}" class="nav-link">
               <i class="nav-icon bi bi-database"></i>
-              <p>List Data</p>
+              <p>Data Iket Dalang</p>
             </a>
           </li>
         </ul>

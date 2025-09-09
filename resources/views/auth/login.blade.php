@@ -87,7 +87,15 @@
               <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 mb-3">Masuk</button>
+            <!-- Tombol Login -->
+            <button type="submit" class="btn btn-primary w-100 mb-2">
+              <i class="bi bi-box-arrow-in-right"></i> Masuk
+            </button>
+
+            <!-- Tombol Home -->
+            <a href="{{ url('/') }}" class="btn btn-outline-secondary w-100">
+              <i class="bi bi-house-door"></i> Home
+            </a>
           </form>
         </div>
       </div>

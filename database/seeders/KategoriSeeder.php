@@ -19,7 +19,7 @@ class KategoriSeeder extends Seeder
             'name' => 'Anak Terlantar',
         ]);
         \App\Models\Kategori::create([
-            'name' => 'Lansia Terlantar',
+            'name' => 'Iket Dalang Terlantar',
         ]);
         \App\Models\Kategori::create([
             'name' => 'Gepeng Terlantar',

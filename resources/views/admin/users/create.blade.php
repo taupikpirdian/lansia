@@ -115,6 +115,44 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('username') is-invalid @enderror" 
+                                           id="username" 
+                                           name="username" 
+                                           value="{{ old('username', $user->username ?? '') }}" 
+                                           placeholder="Masukkan username" 
+                                           required
+                                    >
+                                    @error('username')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('role') is-invalid @enderror" 
+                                            id="role" name="role" required>
+                                        <option value="">Pilih Role</option>
+                                        @foreach($roles as $role)
+                                            <option 
+                                                value="{{ $role->name }}" {{ old('role', $user?->roles->pluck('name')->first() ?? '') == $role->name ? 'selected' : '' }}
+                                            >
+                                                {{ ucfirst($role->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('role')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="password" class="form-label" id="password-label">Password <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="password" class="form-control @error('password') is-invalid @enderror" 
@@ -137,28 +175,6 @@
                                     <input type="password" class="form-control" 
                                            id="password_confirmation" name="password_confirmation" 
                                            placeholder="Konfirmasi password" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
-                                    <select class="form-select @error('role') is-invalid @enderror" 
-                                            id="role" name="role" required>
-                                        <option value="">Pilih Role</option>
-                                        @foreach($roles as $role)
-                                            <option 
-                                                value="{{ $role->name }}" {{ old('role', $user?->roles->pluck('name')->first() ?? '') == $role->name ? 'selected' : '' }}
-                                            >
-                                                {{ ucfirst($role->name) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('role')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -186,6 +202,7 @@
                         <h6><i class="fas fa-lightbulb"></i> Petunjuk Pengisian:</h6>
                         <ul class="mb-0 small">
                             <li>Nama lengkap wajib diisi</li>
+                            <li>Username harus valid dan unik</li>
                             <li>Email harus valid dan unik</li>
                             <li>Password minimal 8 karakter</li>
                             <li>Pilih role sesuai dengan akses yang diinginkan</li>

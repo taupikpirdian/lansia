@@ -3,11 +3,11 @@
   <div class="container-fluid">
     <!--begin::Row-->
     <div class="row">
-      <div class="col-sm-6"><h3 class="mb-0">Medical Check</h3></div>
+      <div class="col-sm-6"><h3 class="mb-0">Iket Dalang</h3></div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-end">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Medical Check</li>
+          <li class="breadcrumb-item active" aria-current="page">Iket Dalang</li>
         </ol>
       </div>
     </div>
@@ -33,8 +33,8 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center w-100">
-                <h3 class="card-title m-0">Data Medical</h3>
-                <a href="{{ route('dashboard.medical.create') }}" class="btn btn-sm btn-primary">
+                <h3 class="card-title m-0">Data Iket Dalang</h3>
+                <a href="{{ route('dashboard.biodata.create') }}" class="btn btn-sm btn-primary">
                     <i class="fas fa-plus"></i> Tambah Data
                 </a>
             </div>
@@ -44,19 +44,24 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Nomor</th>
-                <th>NRP</th>
+                <th>No KK</th>
                 <th>Nama</th>
-                <th>Jabatan</th>
-                <th>Kesatuan</th>
-                <th>Nilai</th>
-                <th>Tanggal Dibuat</th>
+                <th>Tempat Lahir</th>
+                <th>Tanggal Lahir</th>
+                <th>JK</th>
+                <th>Usia (tahun)</th>
+                <th>Agama</th>
+                <th>Status Nikah</th>
+                <th>Kategori</th>
+                <th>Kondisi</th>
+                <th>Pengampu</th>
+                <th>Approved (2)</th>
                 <th>Aksi</th>
             </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="9" class="text-center">Tidak ada data</td>
+                    <td colspan="14" class="text-center">Tidak ada data</td>
                 </tr>
             </tbody>
         </table>
@@ -72,7 +77,7 @@
     });
 
     function destroy(id) {
-        var url = "{{ route('dashboard.users.destroy', ':id') }}".replace(':id', id);
+        var url = "{{ route('dashboard.biodata.destroy', ':id') }}".replace(':id', id);
         callDataWithAjax(url, 'POST', {
             _method: "DELETE"
         }).then((data) => {

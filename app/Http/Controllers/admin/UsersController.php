@@ -40,6 +40,7 @@ class UsersController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'exists:roles,name'],
@@ -49,6 +50,8 @@ class UsersController extends Controller
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
+            'username.required' => 'username wajib diisi.',
+            'username.unique' => 'username sudah terdaftar.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak sama.',
@@ -62,6 +65,7 @@ class UsersController extends Controller
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
+                'username' => $validated['username'],
                 'password' => Hash::make($validated['password']),
             ]);
 
@@ -107,6 +111,7 @@ class UsersController extends Controller
         $rules = [
             'name'  => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $id],
             'role'  => ['required', 'string', 'exists:roles,name'],
         ];
 
@@ -123,6 +128,8 @@ class UsersController extends Controller
             'email.required' => 'Email wajib diisi.',
             'email.email'    => 'Format email tidak valid.',
             'email.unique'   => 'Email sudah terdaftar.',
+            'username.required' => 'username wajib diisi.',
+            'username.unique'   => 'username sudah terdaftar.',
             'role.required'  => 'Role wajib dipilih.',
             'role.exists'    => 'Role yang dipilih tidak valid.',
             'password.required' => 'Password wajib diisi.',
@@ -138,6 +145,7 @@ class UsersController extends Controller
             $user = User::findOrFail($id);
             $user->name = $validated['name'];
             $user->email = $validated['email'];
+            $user->username = $validated['username'];
             if ($request->password) {
                 $user->password = Hash::make($request->password);
             }

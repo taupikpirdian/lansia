@@ -7,6 +7,6 @@ class WelcomeController extends Controller
     public function index()
     {
         // redirect to dashboard
-        return redirect()->intended('/dashboard');
+        return view('welcome');
     }
 }

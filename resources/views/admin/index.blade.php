@@ -18,73 +18,123 @@
 
 @section('content')
 <div class="container-fluid">
-    <!--begin::Row-->
-    <div class="row">
-      <!--begin::Col-->
-      <div class="col-lg-6 col-6">
-        <!--begin::Small Box Widget 1-->
-        <div class="small-box text-bg-primary">
-          <div class="inner">
-            <h3>{{ $countPerkaras }}</h3>
-            <p>Jumlah Data Pasien</p>
-          </div>
-          <svg
-            class="small-box-icon"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
-              d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"
-            ></path>
-            <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
-              d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"
-            ></path>
-          </svg>
-          <a
-            href="#"
-            class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
-          >
-            More info <i class="bi bi-link-45deg"></i>
-          </a>
+  <!-- Ringkasan Cepat -->
+  <div class="row mb-4">
+    <div class="col-lg-3 col-6">
+      <div class="small-box text-bg-primary">
+        <div class="inner">
+          <h3>11</h3>
+          <p>Total Penduduk Terdaftar</p>
         </div>
-        <!--end::Small Box Widget 1-->
-      </div>
-      <!--end::Col-->
-      <div class="col-lg-6 col-6">
-        <!--begin::Small Box Widget 2-->
-        <div class="small-box text-bg-success">
-          <div class="inner">
-            <h3>{{ $countUsers }}</h3>
-            <p>Jumlah Data Medical</p>
-          </div>
-          <svg
-            class="small-box-icon"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
-            ></path>
-          </svg>
-          <a
-            href="#"
-            class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
-          >
-            More info <i class="bi bi-link-45deg"></i>
-          </a>
-        </div>
-        <!--end::Small Box Widget 2-->
+        <i class="bi bi-people small-box-icon"></i>
       </div>
     </div>
-    <!--end::Row-->
+    <div class="col-lg-3 col-6">
+      <div class="small-box text-bg-success">
+        <div class="inner">
+          <h3>2</h3>
+          <p>Penduduk Eligible</p>
+        </div>
+        <i class="bi bi-check-circle small-box-icon"></i>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box text-bg-warning">
+        <div class="inner">
+          <h3>3</h3>
+          <p>Total Desa</p>
+        </div>
+        <i class="bi bi-geo small-box-icon"></i>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box text-bg-danger">
+        <div class="inner">
+          <h3>3</h3>
+          <p>Kategori Khusus (Lansia/Disabilitas)</p>
+        </div>
+        <i class="bi bi-person-wheelchair small-box-icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistik Demografi -->
+  <h5 class="fw-bold mb-3">Statistik Demografi</h5>
+  <div class="row mb-4">
+    <div class="col-lg-3">
+      <div class="card shadow-sm">
+        <div class="card-header">Jenis Kelamin</div>
+        <div class="card-body"><canvas id="chartJenisKelamin"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card shadow-sm">
+        <div class="card-header">Status Nikah</div>
+        <div class="card-body"><canvas id="chartStatusNikah"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card shadow-sm">
+        <div class="card-header">Kategori</div>
+        <div class="card-body"><canvas id="chartKategori"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card shadow-sm">
+        <div class="card-header">Agama</div>
+        <div class="card-body"><canvas id="chartAgama"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribusi Wilayah -->
+  <h5 class="fw-bold mb-3">Distribusi Wilayah</h5>
+  <div class="row mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header">Penduduk per Kecamatan</div>
+        <div class="card-body"><canvas id="chartKecamatan"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header">Penduduk per Desa</div>
+        <div class="card-body"><canvas id="chartDesa"></canvas></div>
+      </div>
+    </div>
+    <div class="col-12 mt-3">
+      <div class="card shadow-sm">
+        <div class="card-header">Top 5 Desa/Kecamatan dengan Penduduk Terbanyak</div>
+        <div class="card-body">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr><th>Nama</th><th>Jumlah Penduduk</th></tr>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kondisi & Pengampu -->
+  <h5 class="fw-bold mb-3">Kondisi & Pengampu</h5>
+  <div class="row mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header">Kondisi</div>
+        <div class="card-body"><canvas id="chartKondisi"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header">Pengampu</div>
+        <div class="card-body"><canvas id="chartPengampu"></canvas></div>
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
 @section('scripts')
@@ -152,5 +202,161 @@
     sales_chart_options,
     );
     sales_chart.render();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // ==== Data Dummy ====
+  const dataJenisKelamin = { "Laki-laki": 2700, "Perempuan": 2530 };
+  const dataAgama        = [
+    {label: "Islam", total: 4000}, 
+    {label: "Kristen", total: 800}, 
+    {label: "Hindu", total: 200}, 
+    {label: "Buddha", total: 150}, 
+    {label: "Lainnya", total: 80}
+  ];
+  const dataStatusNikah  = [
+    {label: "Belum Menikah", total: 1800}, 
+    {label: "Menikah", total: 3000}, 
+    {label: "Cerai", total: 200}, 
+    {label: "Cerai Mati", total: 230}
+  ];
+  const dataKategori     = [
+    {label: "Miskin", total: 500}, 
+    {label: "Disabilitas", total: 120}, 
+    {label: "Lansia", total: 300}, 
+    {label: "Lainnya", total: 100}
+  ];
+  const dataKecamatan    = [
+    {label: "Kec. A", total: 1200}, 
+    {label: "Kec. B", total: 1500}, 
+    {label: "Kec. C", total: 800}, 
+    {label: "Kec. D", total: 900}, 
+    {label: "Kec. E", total: 830}
+  ];
+  const dataDesa         = [
+    {label: "Desa 1", total: 400}, 
+    {label: "Desa 2", total: 520}, 
+    {label: "Desa 3", total: 600}, 
+    {label: "Desa 4", total: 700}, 
+    {label: "Desa 5", total: 350}
+  ];
+  const dataKondisi      = [
+    {label: "Sehat", total: 4300}, 
+    {label: "Sakit", total: 700}, 
+    {label: "Disabilitas", total: 230}
+  ];
+  const dataPengampu     = [
+    {label: "Orang Tua", total: 3000}, 
+    {label: "Saudara", total: 800}, 
+    {label: "Lembaga", total: 200}, 
+    {label: "Mandiri", total: 1230}
+  ];
+  const dataKelahiran    = [
+    {label: "2019", total: 120}, 
+    {label: "2020", total: 150}, 
+    {label: "2021", total: 180}, 
+    {label: "2022", total: 170}, 
+    {label: "2023", total: 190}
+  ];
+  const dataKelompokUmur = [
+    {label: "0-17 (Anak)", total: 1800}, 
+    {label: "18-59 (Dewasa)", total: 2800}, 
+    {label: "60+ (Lansia)", total: 630}
+  ];
+
+  // ==== Chart Rendering ====
+  new Chart(document.getElementById('chartJenisKelamin'), {
+    type: 'pie',
+    data: {
+      labels: Object.keys(dataJenisKelamin),
+      datasets: [{
+        data: Object.values(dataJenisKelamin),
+        backgroundColor: ['#0d6efd', '#dc3545']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartAgama'), {
+    type: 'bar',
+    data: {
+      labels: dataAgama.map(d => d.label),
+      datasets: [{
+        label: 'Jumlah',
+        data: dataAgama.map(d => d.total),
+        backgroundColor: '#198754'
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartStatusNikah'), {
+    type: 'doughnut',
+    data: {
+      labels: dataStatusNikah.map(d => d.label),
+      datasets: [{
+        data: dataStatusNikah.map(d => d.total),
+        backgroundColor: ['#0d6efd', '#198754', '#dc3545', '#ffc107']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartKategori'), {
+    type: 'bar',
+    data: {
+      labels: dataKategori.map(d => d.label),
+      datasets: [{
+        label: 'Jumlah',
+        data: dataKategori.map(d => d.total),
+        backgroundColor: ['#6f42c1', '#20c997', '#fd7e14', '#0dcaf0']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartKecamatan'), {
+    type: 'bar',
+    data: {
+      labels: dataKecamatan.map(d => d.label),
+      datasets: [{
+        label: 'Jumlah',
+        data: dataKecamatan.map(d => d.total),
+        backgroundColor: '#0d6efd'
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartDesa'), {
+    type: 'bar',
+    data: {
+      labels: dataDesa.map(d => d.label),
+      datasets: [{
+        label: 'Jumlah',
+        data: dataDesa.map(d => d.total),
+        backgroundColor: '#20c997'
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartKondisi'), {
+    type: 'pie',
+    data: {
+      labels: dataKondisi.map(d => d.label),
+      datasets: [{
+        data: dataKondisi.map(d => d.total),
+        backgroundColor: ['#198754', '#ffc107', '#dc3545']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chartPengampu'), {
+    type: 'bar',
+    data: {
+      labels: dataPengampu.map(d => d.label),
+      datasets: [{
+        label: 'Jumlah',
+        data: dataPengampu.map(d => d.total),
+        backgroundColor: '#6f42c1'
+      }]
+    }
+  });
 </script>
 @endsection

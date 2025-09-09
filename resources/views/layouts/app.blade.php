@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SI SOPINTAS 110</title>
+  <title>IKET DATALANG</title>
   <link href="{{ asset('vendor/bootstrap-5.3.0/bootstrap.min.css') }}" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
   <style>
@@ -43,44 +43,17 @@
   </style>
 </head>
 <body>
-  <header style="height: 160px; background-color: #4d0f10;">
-    <div class="container-fluid h-100">
-      <div class="row h-100 align-items-center text-white">
-        
-        <!-- Logo Kiri -->
-        <div class="col-2 d-flex justify-content-center align-items-center">
-          <img src="{{ asset('assets/images/logo/logoops.png') }}" alt="Logo OPS POLRI" style="max-height: 100px; height: auto;">
-        </div>
-  
-        <!-- Gambar Tengah dengan Teks -->
-        <div class="col-8 position-relative h-100">
-          <img src="{{ asset('assets/images/bg/bgheader.webp') }}" alt="Gedung Polda" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" style="z-index: 1; opacity: 0.6;"/>
-          <div class="position-relative text-center text-white h-100 d-flex flex-column justify-content-center" style="z-index: 2;">
-            <h6 class="fw-semibold mb-0">SISTEM SINERGI OPERASIONAL PELAYANAN DAN INTRUKSI TANGGAP SIAGA 110</h6>
-            <h4 class="fw-bold text-warning mb-0">(SI SOPINTAS 110)</h4>
-            <p class="mb-0">BIRO OPS POLDA SUMATERA SELATAN</p>
-          </div>
-        </div>
-  
-        <!-- Logo Kanan -->
-        <div class="col-2 d-flex justify-content-center align-items-center">
-          <img src="{{ asset('assets/images/logo/logopolda.png') }}" alt="Logo Sumsel" style="max-height: 100px; height: auto;">
-        </div>
-  
-      </div>
-    </div>
-  </header>
-
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">OPS POLRI</a>
+      <a class="navbar-brand fw-bold" href="#">IKET DALANG</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->is('/dashboard') ? 'active' : '' }}" href="/dashboard">Dashboard</a></li>
         </ul>
       </div>
     </div>
@@ -94,13 +67,45 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-light text-center py-3 mt-auto border-top">
+  <footer class="bg-dark text-light pt-4 mt-auto border-top">
     <div class="container">
-      <h6 class="fw-bold">Link Terkait</h6>
-      <ul class="list-unstyled mb-1">
-        <li><a href="https://sumsel.polri.go.id/" target="_blank" class="text-decoration-none">https://sumsel.polri.go.id/</a></li>
-        <li><a href="https://sumsel.polri.go.id/satwil" target="_blank" class="text-decoration-none">https://sumsel.polri.go.id/satwil</a></li>
-      </ul>
+      <div class="row">
+        <!-- Kolom 1: Branding -->
+        <div class="col-md-4 mb-3">
+          <h5 class="fw-bold">IKET DALANG</h5>
+          <p class="small">
+            Sistem Informasi Pendataan Lansia adalah platform digital yang dikembangkan untuk membantu pemerintah desa dalam mendata, memantau, dan memberikan pelayanan terbaik kepada warga lanjut usia.
+          </p>
+        </div>
+  
+        <!-- Kolom 2: Link Terkait -->
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold">Link Terkait</h6>
+          <ul class="list-unstyled">
+            <li>
+              <a href="https://www.tasikmalayakota.go.id/" target="_blank" class="text-light text-decoration-none">
+                <i class="bi bi-link-45deg"></i> tasikmalayakota.go.id
+              </a>
+            </li>
+          </ul>
+        </div>
+  
+        <!-- Kolom 3: Kontak -->
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold">Kontak</h6>
+          <p class="small mb-1">
+            <i class="bi bi-geo-alt"></i> Jl. Ir. H Juanda No. 191 - Kota Tasikmalaya
+          </p>
+          <p class="small mb-0">
+            <i class="bi bi-envelope"></i> kominfo@tasikmalayakota.go.id
+          </p>
+        </div>
+      </div>
+  
+      <hr class="border-light">
+      <div class="text-center pb-2 small">
+        &copy; 2025 IKET DALANG. All rights reserved.
+      </div>
     </div>
   </footer>
 

@@ -25,5 +25,19 @@ class RolesSeeder extends Seeder
                 "guard_name" => "web",
             ]);
         }
+
+        // add role, operator-desa, operator-kecamatan, operator-dinas
+        Role::create([
+            "name" => "operator-desa",
+            "guard_name" => "web",
+        ]);
+        Role::create([
+            "name" => "operator-kecamatan",
+            "guard_name" => "web",
+        ]);
+        Role::create([
+            "name" => "operator-dinas",
+            "guard_name" => "web",
+        ]);
     }
 }
