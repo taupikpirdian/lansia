@@ -121,7 +121,7 @@
         <div class="col-md-4 mb-3">
           <h5 class="fw-bold">IKET DALANG</h5>
           <p class="small">
-            Sistem Informasi Pendataan Lansia adalah platform digital yang dikembangkan untuk membantu pemerintah desa dalam mendata, memantau, dan memberikan pelayanan terbaik kepada warga lanjut usia.
+            Sistem Informasi Pendataan Anak Disabilitas, Lansia, Gepeng (Iket Dalang) Dinsos PPKB dan P3A Kabupaten Tasikmalaya yang dikembangkan untuk membantu pemerintah desa dalam mendata, memantau, dan memberikan pelayanan terbaik kepada warga.
           </p>
         </div>
   

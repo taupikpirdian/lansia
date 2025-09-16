@@ -13,8 +13,10 @@ use App\Models\Pengampu;
 use App\Models\Kecamatan;
 use App\Models\StatusNikah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LansiaController extends Controller
 {
@@ -183,6 +185,7 @@ class LansiaController extends Controller
         // 1. Validasi
         $validatedData = $request->validate([
             'no_kk'          => 'required|string|max:20',
+            'no_nik'         => 'required|string|max:20',
             'nama'           => 'required|string|max:255',
             'tempat_lahir'   => 'required|string|max:100',
             'tanggal_lahir'  => 'required|date',
@@ -191,18 +194,52 @@ class LansiaController extends Controller
             'kecamatan_id'   => 'required|exists:kecamatans,id',
             'desa_id'        => 'required|exists:desas,id',
             'alamat'         => 'required|string|max:500',
+            'file_ktp'       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_kk'        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_ppks'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'status_nikah_id' => 'required|exists:status_nikahs,id',
             'kategori_id'    => 'required|exists:kategoris,id',
             'kondisi_id'     => 'required|exists:kondisis,id',
             'pengampu_id'    => 'required|exists:pengampus,id',
         ]);
 
-        // 2. DB Transaction + 3. Try-Catch
+        // 2. Handle file uploads
+        $fileKtp = null;
+        $fileKtpUrl = null;
+        $fileKk = null;
+        $fileKkUrl = null;
+        $filePpks = null;
+        $filePpksUrl = null;
+
+        if ($request->hasFile('file_ktp')) {
+            $file = $request->file('file_ktp');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('ktp', $filename, 'public');
+            $fileKtp = $filename;
+            $fileKtpUrl = $path;
+        }
+        if ($request->hasFile('file_kk')) {
+            $file = $request->file('file_kk');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('kk', $filename, 'public');
+            $fileKk = $filename;
+            $fileKkUrl = $path;
+        }
+        if ($request->hasFile('file_ppks')) {
+            $file = $request->file('file_ppks');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('ppks', $filename, 'public');
+            $filePpks = $filename;
+            $filePpksUrl = $path;
+        }
+
+        // 3. DB Transaction + Try-Catch
         try {
             DB::beginTransaction();
 
             Biodata::create([
                 'no_kk'           => $validatedData['no_kk'],
+                'no_nik'          => $validatedData['no_nik'],
                 'nama'            => $validatedData['nama'],
                 'tempat_lahir'    => $validatedData['tempat_lahir'],
                 'tanggal_lahir'   => $validatedData['tanggal_lahir'],
@@ -211,6 +248,12 @@ class LansiaController extends Controller
                 'kecamatan_id'    => $validatedData['kecamatan_id'],
                 'desa_id'         => $validatedData['desa_id'],
                 'alamat'          => $validatedData['alamat'],
+                'file_ktp'        => $fileKtp,
+                'file_ktp_url'    => $fileKtpUrl,
+                'file_kk'         => $fileKk,
+                'file_kk_url'     => $fileKkUrl,
+                'file_ppks'       => $filePpks,
+                'file_ppks_url'   => $filePpksUrl,
                 'status_nikah_id' => $validatedData['status_nikah_id'],
                 'kategori_id'     => $validatedData['kategori_id'],
                 'kondisi_id'      => $validatedData['kondisi_id'],
@@ -289,6 +332,7 @@ class LansiaController extends Controller
         // 1. Validasi
         $validatedData = $request->validate([
             'no_kk'           => 'required|string|max:20',
+            'no_nik'          => 'required|string|max:20',
             'nama'            => 'required|string|max:255',
             'tempat_lahir'    => 'required|string|max:100',
             'tanggal_lahir'   => 'required|date',
@@ -297,17 +341,75 @@ class LansiaController extends Controller
             'kecamatan_id'    => 'required|exists:kecamatans,id',
             'desa_id'         => 'required|exists:desas,id',
             'alamat'          => 'required|string|max:500',
+            'file_ktp'        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_kk'         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_ppks'       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'status_nikah_id' => 'required|exists:status_nikahs,id',
             'kategori_id'     => 'required|exists:kategoris,id',
             'kondisi_id'      => 'required|exists:kondisis,id',
             'pengampu_id'     => 'required|exists:pengampus,id',
         ]);
 
-        // 2. DB Transaction + 3. Try-Catch
+        // 2. Handle file uploads
+        $biodata = Biodata::findOrFail($id);
+        
+        // Default data yang diupdate
+        $data = [
+            'no_kk'           => $validatedData['no_kk'],
+            'no_nik'          => $validatedData['no_nik'],
+            'nama'            => $validatedData['nama'],
+            'tempat_lahir'    => $validatedData['tempat_lahir'],
+            'tanggal_lahir'   => $validatedData['tanggal_lahir'],
+            'jk'              => $validatedData['jk'],
+            'agama_id'        => $validatedData['agama_id'],
+            'kecamatan_id'    => $validatedData['kecamatan_id'],
+            'desa_id'         => $validatedData['desa_id'],
+            'alamat'          => $validatedData['alamat'],
+            'status_nikah_id' => $validatedData['status_nikah_id'],
+            'kategori_id'     => $validatedData['kategori_id'],
+            'kondisi_id'      => $validatedData['kondisi_id'],
+            'pengampu_id'     => $validatedData['pengampu_id'],
+        ];
+
+        // Handle file uploads
+        if ($request->hasFile('file_ktp')) {
+            // Delete old file if exists
+            if ($biodata->file_ktp_url && Storage::disk('public')->exists($biodata->file_ktp_url)) {
+                Storage::disk('public')->delete($biodata->file_ktp_url);
+            }
+            $file = $request->file('file_ktp');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('ktp', $filename, 'public');
+            $data['file_ktp'] = $filename;
+            $data['file_ktp_url'] = $path;
+        }
+        if ($request->hasFile('file_kk')) {
+            // Delete old file if exists
+            if ($biodata->file_kk_url && Storage::disk('public')->exists($biodata->file_kk_url)) {
+                Storage::disk('public')->delete($biodata->file_kk_url);
+            }
+            $file = $request->file('file_kk');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('kk', $filename, 'public');
+            $data['file_kk'] = $filename;
+            $data['file_kk_url'] = $path;
+        }
+        if ($request->hasFile('file_ppks')) {
+            // Delete old file if exists
+            if ($biodata->file_ppks_url && Storage::disk('public')->exists($biodata->file_ppks_url)) {
+                Storage::disk('public')->delete($biodata->file_ppks_url);
+            }
+            $file = $request->file('file_ppks');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('ppks', $filename, 'public');
+            $data['file_ppks'] = $filename;
+            $data['file_ppks_url'] = $path;
+        }
+
+        // 3. DB Transaction + Try-Catch
         try {
             DB::beginTransaction();
 
-            $biodata = Biodata::findOrFail($id);
             if ($biodata->approvals()->exists()) {
                 return redirect()->back()
                     ->with('error', 'Data tidak bisa diupdate karena sudah memiliki minimal 1 approval.');
@@ -318,21 +420,7 @@ class LansiaController extends Controller
                     ->with('error', 'Data tidak bisa diupdate karena sudah disetujui.');
             }
 
-            $biodata->update([
-                'no_kk'           => $validatedData['no_kk'],
-                'nama'            => $validatedData['nama'],
-                'tempat_lahir'    => $validatedData['tempat_lahir'],
-                'tanggal_lahir'   => $validatedData['tanggal_lahir'],
-                'jk'              => $validatedData['jk'],
-                'agama_id'        => $validatedData['agama_id'],
-                'kecamatan_id'    => $validatedData['kecamatan_id'],
-                'desa_id'         => $validatedData['desa_id'],
-                'alamat'          => $validatedData['alamat'],
-                'status_nikah_id' => $validatedData['status_nikah_id'],
-                'kategori_id'     => $validatedData['kategori_id'],
-                'kondisi_id'      => $validatedData['kondisi_id'],
-                'pengampu_id'     => $validatedData['pengampu_id'],
-            ]);
+            $biodata->update($data);
 
             // jika status di tolak, update to revisi
             if ($biodata->status == 'ditolak') {

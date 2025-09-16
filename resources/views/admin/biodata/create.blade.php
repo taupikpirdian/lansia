@@ -15,6 +15,20 @@
         </div>
     </div>
 </div>
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Preview Gambar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Preview">
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('content')
@@ -38,10 +52,10 @@
         </div>
         <div class="card-body">
             @if($is_edit)
-                <form action="{{ route('dashboard.biodata.update', $data->id) }}" method="POST">
+                <form action="{{ route('dashboard.biodata.update', $data->id) }}" method="POST" enctype="multipart/form-data">
                 @method('PUT')
             @else
-                <form action="{{ route('dashboard.biodata.store') }}" method="POST">
+                <form action="{{ route('dashboard.biodata.store') }}" method="POST" enctype="multipart/form-data">
             @endif
                 @csrf
 
@@ -49,6 +63,10 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">No KK <span class="text-danger">*</span></label>
                         <input type="text" name="no_kk" class="form-control" value="{{ old('no_kk', $data->no_kk ?? '') }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No NIK <span class="text-danger">*</span></label>
+                        <input type="text" name="no_nik" class="form-control" value="{{ old('no_nik', $data->no_nik ?? '') }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Nama <span class="text-danger">*</span></label>
@@ -146,6 +164,68 @@
                             @endforeach
                         </select>
                     </div>
+                    
+                    <!-- File Upload Fields -->
+                    <div class="col-12 mb-3">
+                        <h5 class="mb-3">Upload Dokumen (Opsional)</h5>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Upload KTP</label>
+                        <input type="file" name="file_ktp" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'ktp-preview')">
+                        @if($is_edit && isset($data->file_ktp) && $data->file_ktp)
+                            <div class="mt-2">
+                                <img id="ktp-preview" src="/file/ktp/{{ $data->file_ktp }}" 
+                                     class="img-thumbnail img-clickable" 
+                                     style="max-width: 200px; max-height: 150px; cursor: pointer;"
+                                     data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                     data-img-src="/file/ktp/{{ $data->file_ktp }}" 
+                                     alt="KTP Preview">
+                                <br><small class="text-muted">File saat ini: <a href="/file/ktp/{{ $data->file_ktp }}" target="_blank">Lihat File</a></small>
+                            </div>
+                        @else
+                            <div class="mt-2">
+                                <img id="ktp-preview" style="max-width: 200px; max-height: 150px; display: none;" class="img-thumbnail img-clickable" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            </div>
+                        @endif
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Upload KK</label>
+                        <input type="file" name="file_kk" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'kk-preview')">
+                        @if($is_edit && isset($data->file_kk) && $data->file_kk)
+                            <div class="mt-2">
+                                <img id="kk-preview" src="/file/kk/{{ $data->file_kk }}" 
+                                     class="img-thumbnail img-clickable" 
+                                     style="max-width: 200px; max-height: 150px; cursor: pointer;"
+                                     data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                     data-img-src="/file/kk/{{ $data->file_kk }}" 
+                                     alt="KK Preview">
+                                <br><small class="text-muted">File saat ini: <a href="/file/kk/{{ $data->file_kk }}" target="_blank">Lihat File</a></small>
+                            </div>
+                        @else
+                            <div class="mt-2">
+                                <img id="kk-preview" style="max-width: 200px; max-height: 150px; display: none;" class="img-thumbnail img-clickable" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            </div>
+                        @endif
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Upload PPKS</label>
+                        <input type="file" name="file_ppks" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'ppks-preview')">
+                        @if($is_edit && isset($data->file_ppks) && $data->file_ppks)
+                            <div class="mt-2">
+                                <img id="ppks-preview" src="/file/ppks/{{ $data->file_ppks }}" 
+                                     class="img-thumbnail img-clickable" 
+                                     style="max-width: 200px; max-height: 150px; cursor: pointer;"
+                                     data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                     data-img-src="/file/ppks/{{ $data->file_ppks }}" 
+                                     alt="PPKS Preview">
+                                <br><small class="text-muted">File saat ini: <a href="/file/ppks/{{ $data->file_ppks }}" target="_blank">Lihat File</a></small>
+                            </div>
+                        @else
+                            <div class="mt-2">
+                                <img id="ppks-preview" style="max-width: 200px; max-height: 150px; display: none;" class="img-thumbnail img-clickable" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            </div>
+                        @endif
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
@@ -201,6 +281,49 @@
             } else {
                 $('select[name="desa_id"]').empty();
             }
+        });
+    </script>
+
+    <script>
+        // Function to preview uploaded files
+        function previewFile(input, previewId) {
+            const file = input.files[0];
+            const preview = document.getElementById(previewId);
+            
+            if (file) {
+                // Check if file is an image
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        preview.setAttribute('data-img-src', e.target.result);
+                        preview.style.cursor = 'pointer';
+                    }
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    // For non-image files (PDF), hide preview
+                    preview.style.display = 'none';
+                }
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+        
+        // Handle image modal
+        $(document).ready(function() {
+            $('.img-clickable').on('click', function() {
+                const imgSrc = $(this).attr('data-img-src') || $(this).attr('src');
+                $('#modalImage').attr('src', imgSrc);
+            });
+            
+            // Update modal image when dynamically added images are clicked
+            $(document).on('click', '.img-clickable', function() {
+                const imgSrc = $(this).attr('data-img-src') || $(this).attr('src');
+                $('#modalImage').attr('src', imgSrc);
+            });
         });
     </script>
 @endsection

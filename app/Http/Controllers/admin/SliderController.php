@@ -38,18 +38,76 @@ class SliderController extends Controller
             'name' => 'nullable|string|max:255',
             'description' => 'required|string',
             'image' => 'required',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person1_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person1_name' => 'nullable|string|max:255',
+            'person1_position' => 'nullable|string|max:255',
+            'person2_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person2_name' => 'nullable|string|max:255',
+            'person2_position' => 'nullable|string|max:255',
+            'person3_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person3_name' => 'nullable|string|max:255',
+            'person3_position' => 'nullable|string|max:255',
         ]);
 
-        $file = $request->file('image');
-        $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('sliders', $filename, 'public');
-
-        Slider::create([
+        // Prepare data array
+        $data = [
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $filename,
-            'link' => $path,
-        ]);
+            'person1_name' => $request->person1_name,
+            'person1_position' => $request->person1_position,
+            'person2_name' => $request->person2_name,
+            'person2_position' => $request->person2_position,
+            'person3_name' => $request->person3_name,
+            'person3_position' => $request->person3_position,
+        ];
+
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('sliders', $filename, 'public');
+            $data['image'] = $filename;
+            $data['link'] = $path;
+        }
+
+        // Handle background image upload
+        if ($request->hasFile('background_image')) {
+            $file = $request->file('background_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['background_image'] = $filename;
+            $data['background_image_url'] = 'sliders/' . $filename;
+        }
+
+        // Handle person1 image upload
+        if ($request->hasFile('person1_image')) {
+            $file = $request->file('person1_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['person1_image'] = $filename;
+            $data['person1_image_url'] = 'sliders/' . $filename;
+        }
+
+        // Handle person2 image upload
+        if ($request->hasFile('person2_image')) {
+            $file = $request->file('person2_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['person2_image'] = $filename;
+            $data['person2_image_url'] = 'sliders/' . $filename;
+        }
+
+        // Handle person3 image upload
+        if ($request->hasFile('person3_image')) {
+            $file = $request->file('person3_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['person3_image'] = $filename;
+            $data['person3_image_url'] = 'sliders/' . $filename;
+        }
+
+        Slider::create($data);
 
         return redirect()->route('dashboard.slider.index')->with('success', 'Slider created successfully');
     }
@@ -82,6 +140,16 @@ class SliderController extends Controller
             'name' => 'nullable|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person1_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person1_name' => 'nullable|string|max:255',
+            'person1_position' => 'nullable|string|max:255',
+            'person2_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person2_name' => 'nullable|string|max:255',
+            'person2_position' => 'nullable|string|max:255',
+            'person3_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'person3_name' => 'nullable|string|max:255',
+            'person3_position' => 'nullable|string|max:255',
         ]);
 
         $slider = Slider::findOrFail($id);
@@ -90,9 +158,15 @@ class SliderController extends Controller
         $data = [
             'name' => $request->name,
             'description' => $request->description,
+            'person1_name' => $request->person1_name,
+            'person1_position' => $request->person1_position,
+            'person2_name' => $request->person2_name,
+            'person2_position' => $request->person2_position,
+            'person3_name' => $request->person3_name,
+            'person3_position' => $request->person3_position,
         ];
 
-        // Kalau ada file baru
+        // Handle main image upload
         if ($request->hasFile('image')) {
             // Hapus gambar lama
             if ($slider->link && Storage::disk('public')->exists($slider->link)) {
@@ -107,6 +181,62 @@ class SliderController extends Controller
             // Simpan nama file dan path baru
             $data['image'] = $filename;
             $data['link'] = $path;
+        }
+
+        // Handle background image upload
+        if ($request->hasFile('background_image')) {
+            // Hapus gambar lama
+            if ($slider->background_image_url && Storage::disk('public')->exists($slider->background_image_url)) {
+                Storage::disk('public')->delete($slider->background_image_url);
+            }
+
+            $file = $request->file('background_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['background_image'] = $filename;
+            $data['background_image_url'] = 'sliders/' . $filename;
+        }
+
+        // Handle person1 image upload
+        if ($request->hasFile('person1_image')) {
+            // Hapus gambar lama
+            if ($slider->person1_image_url && Storage::disk('public')->exists($slider->person1_image_url)) {
+                Storage::disk('public')->delete($slider->person1_image_url);
+            }
+
+            $file = $request->file('person1_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['person1_image'] = $filename;
+            $data['person1_image_url'] = 'sliders/' . $filename;
+        }
+
+        // Handle person2 image upload
+        if ($request->hasFile('person2_image')) {
+            // Hapus gambar lama
+            if ($slider->person2_image_url && Storage::disk('public')->exists($slider->person2_image_url)) {
+                Storage::disk('public')->delete($slider->person2_image_url);
+            }
+
+            $file = $request->file('person2_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['person2_image'] = $filename;
+            $data['person2_image_url'] = 'sliders/' . $filename;
+        }
+
+        // Handle person3 image upload
+        if ($request->hasFile('person3_image')) {
+            // Hapus gambar lama
+            if ($slider->person3_image_url && Storage::disk('public')->exists($slider->person3_image_url)) {
+                Storage::disk('public')->delete($slider->person3_image_url);
+            }
+
+            $file = $request->file('person3_image');
+            $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('sliders', $filename, 'public');
+            $data['person3_image'] = $filename;
+            $data['person3_image_url'] = 'sliders/' . $filename;
         }
 
         $slider->update($data);

@@ -40,6 +40,10 @@
                             <p class="form-control-plaintext">{{ $data->no_kk }}</p>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">No NIK</label>
+                            <p class="form-control-plaintext">{{ $data->no_nik ?? '-' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Nama</label>
                             <p class="form-control-plaintext">{{ $data->nama }}</p>
                         </div>
@@ -86,6 +90,71 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Pengampu</label>
                             <p class="form-control-plaintext">{{ $data->pengampu->name ?? '-' }}</p>
+                        </div>
+                        
+                        <!-- File Downloads Section -->
+                        <div class="col-12 mb-3">
+                            <h5 class="mb-3">Dokumen Terlampir</h5>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">File KTP</label>
+                            @if($data->file_ktp)
+                                <div class="mt-1">
+                                    @if(in_array(pathinfo($data->file_ktp, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                                        <img src="/file/ktp/{{ $data->file_ktp }}" 
+                                             class="img-thumbnail img-clickable d-block mb-2" 
+                                             style="max-width: 200px; max-height: 150px; cursor: pointer;"
+                                             data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                             data-img-src="/file/ktp/{{ $data->file_ktp }}" 
+                                             alt="KTP Preview">
+                                    @endif
+                                    <a href="/file/ktp/{{ $data->file_ktp }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download KTP
+                                    </a>
+                                </div>
+                            @else
+                                <p class="form-control-plaintext text-muted">Tidak ada file</p>
+                            @endif
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">File KK</label>
+                            @if($data->file_kk)
+                                <div class="mt-1">
+                                    @if(in_array(pathinfo($data->file_kk, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                                        <img src="/file/kk/{{ $data->file_kk }}" 
+                                             class="img-thumbnail img-clickable d-block mb-2" 
+                                             style="max-width: 200px; max-height: 150px; cursor: pointer;"
+                                             data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                             data-img-src="/file/kk/{{ $data->file_kk }}" 
+                                             alt="KK Preview">
+                                    @endif
+                                    <a href="/file/kk/{{ $data->file_kk }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download KK
+                                    </a>
+                                </div>
+                            @else
+                                <p class="form-control-plaintext text-muted">Tidak ada file</p>
+                            @endif
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">File PPKS</label>
+                            @if($data->file_ppks)
+                                <div class="mt-1">
+                                    @if(in_array(pathinfo($data->file_ppks, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                                        <img src="/file/ppks/{{ $data->file_ppks }}" 
+                                             class="img-thumbnail img-clickable d-block mb-2" 
+                                             style="max-width: 200px; max-height: 150px; cursor: pointer;"
+                                             data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                             data-img-src="/file/ppks/{{ $data->file_ppks }}" 
+                                             alt="PPKS Preview">
+                                    @endif
+                                    <a href="/file/ppks/{{ $data->file_ppks }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download PPKS
+                                    </a>
+                                </div>
+                            @else
+                                <p class="form-control-plaintext text-muted">Tidak ada file</p>
+                            @endif
                         </div>
 
                         <div class="col-12 mt-3">
@@ -163,6 +232,21 @@
     </div>
 </div>
 
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Preview Gambar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Preview">
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -183,5 +267,17 @@
             }
         });
     }
+
+    // Image modal functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const imgSrc = button.getAttribute('data-img-src');
+            modalImage.src = imgSrc;
+        });
+    });
 </script>
 @endsection

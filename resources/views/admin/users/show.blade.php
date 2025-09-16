@@ -51,6 +51,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
+                                <label class="form-label fw-bold">Username</label>
+                                <p class="form-control-plaintext">{{ $user->username ?? '-' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
                                 <label class="form-label fw-bold">Role</label>
                                 <div>
                                     {{ $user->roles->pluck('name')->first() }}

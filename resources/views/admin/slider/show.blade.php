@@ -66,22 +66,142 @@
 
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="image" class="form-label">Gambar <span class="text-danger">*</span></label>
+                                <label for="image" class="form-label">Gambar Utama <span class="text-danger">*</span></label>
                                 <input type="file" class="form-control @error('image') is-invalid @enderror" 
                                        id="image" name="image" 
                                        disabled
                                        >
-                                    @if($data)
+                                    @if($data && $data->image)
                                         <img src="{{ url('file/sliders/' . $data->image) }}"
                                         class="card-img-top rounded object-fit-cover img-clickable"
                                         data-bs-toggle="modal"
                                         data-bs-target="#imageModal"
-                                        data-img-src="{{ url('file/slider/' . $data->image) }}"
+                                        data-img-src="{{ url('file/sliders/' . $data->image) }}"
                                         alt="Image" style="width: 300px; height: 300px;">
                                     @endif
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="background_image" class="form-label">Background Image</label>
+                                <input type="file" class="form-control" disabled>
+                                @if($data && $data->background_image)
+                                    <img src="{{ url('file/sliders/' . $data->background_image) }}"
+                                    class="card-img-top rounded object-fit-cover img-clickable mt-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#imageModal"
+                                    data-img-src="{{ url('file/sliders/' . $data->background_image) }}"
+                                    alt="Background Image" style="width: 300px; height: 200px;">
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Person 1 -->
+                        <div class="col-md-12">
+                            <h6 class="fw-bold text-primary mb-3">Person 1</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="person1_name" class="form-label">Nama Person 1</label>
+                                <input type="text" class="form-control" 
+                                       value="{{ $data->person1_name ?? '-' }}" 
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="person1_position" class="form-label">Jabatan Person 1</label>
+                                <input type="text" class="form-control" 
+                                       value="{{ $data->person1_position ?? '-' }}" 
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="person1_image" class="form-label">Foto Person 1</label>
+                                <input type="file" class="form-control" disabled>
+                                @if($data && $data->person1_image)
+                                    <img src="{{ url('file/sliders/' . $data->person1_image) }}"
+                                    class="card-img-top rounded-circle object-fit-cover img-clickable mt-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#imageModal"
+                                    data-img-src="{{ url('file/sliders/' . $data->person1_image) }}"
+                                    alt="Person 1" style="width: 120px; height: 120px;">
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Person 2 -->
+                        <div class="col-md-12">
+                            <h6 class="fw-bold text-primary mb-3">Person 2</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="person2_name" class="form-label">Nama Person 2</label>
+                                <input type="text" class="form-control" 
+                                       value="{{ $data->person2_name ?? '-' }}" 
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="person2_position" class="form-label">Jabatan Person 2</label>
+                                <input type="text" class="form-control" 
+                                       value="{{ $data->person2_position ?? '-' }}" 
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="person2_image" class="form-label">Foto Person 2</label>
+                                <input type="file" class="form-control" disabled>
+                                @if($data && $data->person2_image)
+                                    <img src="{{ url('file/sliders/' . $data->person2_image) }}"
+                                    class="card-img-top rounded-circle object-fit-cover img-clickable mt-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#imageModal"
+                                    data-img-src="{{ url('file/sliders/' . $data->person2_image) }}"
+                                    alt="Person 2" style="width: 120px; height: 120px;">
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Person 3 -->
+                        <div class="col-md-12">
+                            <h6 class="fw-bold text-primary mb-3">Person 3</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="person3_name" class="form-label">Nama Person 3</label>
+                                <input type="text" class="form-control" 
+                                       value="{{ $data->person3_name ?? '-' }}" 
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="person3_position" class="form-label">Jabatan Person 3</label>
+                                <input type="text" class="form-control" 
+                                       value="{{ $data->person3_position ?? '-' }}" 
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="person3_image" class="form-label">Foto Person 3</label>
+                                <input type="file" class="form-control" disabled>
+                                @if($data && $data->person3_image)
+                                    <img src="{{ url('file/sliders/' . $data->person3_image) }}"
+                                    class="card-img-top rounded-circle object-fit-cover img-clickable mt-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#imageModal"
+                                    data-img-src="{{ url('file/sliders/' . $data->person3_image) }}"
+                                    alt="Person 3" style="width: 120px; height: 120px;">
+                                @endif
                             </div>
                         </div>
                     </div>
