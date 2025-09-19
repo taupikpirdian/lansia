@@ -10,9 +10,11 @@ use App\Models\Biodata;
 use App\Models\Kondisi;
 use App\Models\Kategori;
 use App\Models\Pengampu;
+use App\Models\Kecamatan;
 use App\Models\StatusNikah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -21,28 +23,49 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // Get user role
+        $user = Auth::user();
+        $role = $user->roles->first()->name ?? null; // Get first role name
+
+        // Base query with role-based filtering
+        $baseQuery = Biodata::when($role == 'operator-desa', function ($query) use ($user) {
+            $query->where('desa_id', $user->desa_id);
+        })->when($role == 'operator-kecamatan', function ($query) use ($user) {
+            $query->where('kecamatan_id', $user->kecamatan_id);
+        });
+
         // Total Penduduk Terdaftar
-        $countUsers = Biodata::count();
+        $countUsers = (clone $baseQuery)->count();
 
         // Penduduk Eligible
-        $countEligible = Biodata::where('status', 'disetujui')->count();
+        $countEligible = (clone $baseQuery)->where('status', 'disetujui')->count();
 
         // Total Desa 
-        $countDesa = Desa::count();
+        // count bedas by kecamatan_id
+        if ($role == 'operator-kecamatan') {
+            $kec = Kecamatan::where('id', $user->kecamatan_id)->first();
+            $countDesa = Desa::where('kode_kec', $kec->kode_kec)->count();
+        } else if ($role == "operator-desa") {
+            $desa = Desa::where('id', $user->desa_id)->first();
+            $kec = Kecamatan::where('kode_kec', $desa->kode_kec)->first();
+            $countDesa = Desa::where('kode_kec', $kec->kode_kec)->count();
+        } else {
+            $countDesa = Desa::count();
+        }
 
         // Total Kategori Khusus Lansia/Disabilitas
-        $countKategoriKhusus = Biodata::whereHas('kategori', function ($query) {
+        $countKategoriKhusus = (clone $baseQuery)->whereHas('kategori', function ($query) {
             $query->where('name', 'Disabilitas Terlantar');
         })->count();
 
         // Jenis Kelamin
-        $countLakiLaki = Biodata::where('jk', 'L')->count();
-        $countPerempuan = Biodata::where('jk', 'P')->count();
+        $countLakiLaki = (clone $baseQuery)->where('jk', 'L')->count();
+        $countPerempuan = (clone $baseQuery)->where('jk', 'P')->count();
 
         // semua status nikah
         $allStatus = StatusNikah::pluck('name', 'id'); // ['1' => 'Belum Menikah', ...]
         // hitung jumlah biodata per status nikah
-        $counts = Biodata::selectRaw('status_nikah_id, COUNT(*) as total')
+        $counts = (clone $baseQuery)->selectRaw('status_nikah_id, COUNT(*) as total')
             ->groupBy('status_nikah_id')
             ->pluck('total', 'status_nikah_id'); // ['1' => 1800, ...]
         // gabungkan supaya semua status muncul walaupun count 0
@@ -55,7 +78,7 @@ class DashboardController extends Controller
 
         // --- Kategori ---
         $allKategori = Kategori::pluck('name', 'id'); // semua kategori
-        $countsKategori = Biodata::selectRaw('kategori_id, COUNT(*) as total')
+        $countsKategori = (clone $baseQuery)->selectRaw('kategori_id, COUNT(*) as total')
             ->groupBy('kategori_id')
             ->pluck('total', 'kategori_id');
         $dataKategori = $allKategori->map(function ($label, $id) use ($countsKategori) {
@@ -67,7 +90,7 @@ class DashboardController extends Controller
 
         // --- Agama ---
         $allAgama = Agama::pluck('name', 'id'); // semua agama
-        $countsAgama = Biodata::selectRaw('agama_id, COUNT(*) as total')
+        $countsAgama = (clone $baseQuery)->selectRaw('agama_id, COUNT(*) as total')
             ->groupBy('agama_id')
             ->pluck('total', 'agama_id');
 
@@ -80,7 +103,7 @@ class DashboardController extends Controller
 
         // --- Kondisi ---
         $allKondisi = Kondisi::pluck('name', 'id'); // semua kondisi
-        $countsKondisi = Biodata::selectRaw('kondisi_id, COUNT(*) as total')
+        $countsKondisi = (clone $baseQuery)->selectRaw('kondisi_id, COUNT(*) as total')
             ->groupBy('kondisi_id')
             ->pluck('total', 'kondisi_id');
 
@@ -93,7 +116,7 @@ class DashboardController extends Controller
 
         // --- Pengampu ---
         $allPengampu = Pengampu::pluck('name', 'id'); // semua pengampu
-        $countsPengampu = Biodata::selectRaw('pengampu_id, COUNT(*) as total')
+        $countsPengampu = (clone $baseQuery)->selectRaw('pengampu_id, COUNT(*) as total')
             ->groupBy('pengampu_id')
             ->pluck('total', 'pengampu_id');
 
@@ -104,7 +127,7 @@ class DashboardController extends Controller
             ];
         })->values();
 
-        $dataKecamatan = Biodata::selectRaw('kecamatan_id, COUNT(*) as total')
+        $dataKecamatan = (clone $baseQuery)->selectRaw('kecamatan_id, COUNT(*) as total')
             ->with('kecamatan') // eager load nama kecamatan
             ->groupBy('kecamatan_id')
             ->get()
@@ -115,7 +138,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $dataDesa = Biodata::selectRaw('desa_id, COUNT(*) as total')
+        $dataDesa = (clone $baseQuery)->selectRaw('desa_id, COUNT(*) as total')
             ->with('desa') // eager load nama desa
             ->groupBy('desa_id')
             ->get()
@@ -126,7 +149,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $topDesa = Biodata::selectRaw('desa_id, COUNT(*) as total')
+        $topDesa = (clone $baseQuery)->selectRaw('desa_id, COUNT(*) as total')
             ->with('desa')
             ->groupBy('desa_id')
             ->orderByDesc('total')

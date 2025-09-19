@@ -56,12 +56,17 @@ class LansiaController extends Controller
             $order = $columns[$request->input('order.0.column')];
             $dir = $request->input('order.0.dir');
 
-            $posts = Biodata::orderBy('created_at', 'desc');
+            $role = Auth::user()->roles[0]->name;
+            $posts = Biodata::when($role == 'operator-desa', function ($query) use ($request) {
+                $query->where('desa_id', Auth::user()->desa_id);
+            })->when($role == 'operator-kecamatan', function ($query) use ($request) {
+                $query->where('kecamatan_id', Auth::user()->kecamatan_id);
+            })->orderBy('created_at', 'desc');
+
             if ($request->search['value']) {
                 $posts = $posts->where('no_kk', 'like', '%' . $request->search['value'] . '%')
                     ->orWhere('nama', 'like', '%' . $request->search['value'] . '%');
             }
-
 
             $totalData = $posts->count();
             $posts = $posts->skip($start)->take($limit)->orderBy($order, $dir)->get();
@@ -191,8 +196,6 @@ class LansiaController extends Controller
             'tanggal_lahir'  => 'required|date',
             'jk'             => 'required|in:L,P',
             'agama_id'       => 'required|exists:agamas,id',
-            'kecamatan_id'   => 'required|exists:kecamatans,id',
-            'desa_id'        => 'required|exists:desas,id',
             'alamat'         => 'required|string|max:500',
             'file_ktp'       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'file_kk'        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -236,6 +239,33 @@ class LansiaController extends Controller
         // 3. DB Transaction + Try-Catch
         try {
             DB::beginTransaction();
+            if (Auth::user()->role == 'admin') {
+                // required jika admin
+                if (!$request->input('kecamatan_id')) {
+                    return redirect()->back()
+                        ->with('error', 'Kecamatan harus dipilih.');
+                }
+                if (!$request->input('desa_id')) {
+                    return redirect()->back()
+                        ->with('error', 'Desa harus dipilih.');
+                }
+
+                $validatedData['kecamatan_id'] = $request->input('kecamatan_id');
+                $validatedData['desa_id'] = $request->input('desa_id');
+            } else {
+                $desa = Desa::where('id', Auth::user()->desa_id)->first();
+                if (!$desa) {
+                    return redirect()->back()
+                        ->with('error', 'Desa tidak ditemukan.');
+                }
+                $kec = Kecamatan::where('kode_kec', $desa->kode_kec)->first();
+                if (!$kec) {
+                    return redirect()->back()
+                        ->with('error', 'Kecamatan tidak ditemukan.');
+                }
+                $validatedData['kecamatan_id'] = $kec->id;
+                $validatedData['desa_id'] = $desa->id;
+            }
 
             Biodata::create([
                 'no_kk'           => $validatedData['no_kk'],
@@ -329,6 +359,7 @@ class LansiaController extends Controller
             return redirect()->back()
                 ->with('error', 'Anda tidak memiliki izin untuk edit data.');
         }
+
         // 1. Validasi
         $validatedData = $request->validate([
             'no_kk'           => 'required|string|max:20',
@@ -338,8 +369,6 @@ class LansiaController extends Controller
             'tanggal_lahir'   => 'required|date',
             'jk'              => 'required|in:L,P',
             'agama_id'        => 'required|exists:agamas,id',
-            'kecamatan_id'    => 'required|exists:kecamatans,id',
-            'desa_id'         => 'required|exists:desas,id',
             'alamat'          => 'required|string|max:500',
             'file_ktp'        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'file_kk'         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -350,9 +379,35 @@ class LansiaController extends Controller
             'pengampu_id'     => 'required|exists:pengampus,id',
         ]);
 
+        if (Auth::user()->role == 'admin') {
+            if (!$request->input('kecamatan_id')) {
+                return redirect()->back()
+                    ->with('error', 'Kecamatan harus dipilih.');
+            }
+            if (!$request->input('desa_id')) {
+                return redirect()->back()
+                    ->with('error', 'Desa harus dipilih.');
+            }
+            $validatedData['kecamatan_id'] = $request->input('kecamatan_id');
+            $validatedData['desa_id'] = $request->input('desa_id');
+        } else {
+            $desa = Desa::where('id', Auth::user()->desa_id)->first();
+            if (!$desa) {
+                return redirect()->back()
+                    ->with('error', 'Desa tidak ditemukan.');
+            }
+            $kec = Kecamatan::where('kode_kec', $desa->kode_kec)->first();
+            if (!$kec) {
+                return redirect()->back()
+                    ->with('error', 'Kecamatan tidak ditemukan.');
+            }
+            $validatedData['kecamatan_id'] = $kec->id;
+            $validatedData['desa_id'] = $desa->id;
+        }
+
         // 2. Handle file uploads
         $biodata = Biodata::findOrFail($id);
-        
+
         // Default data yang diupdate
         $data = [
             'no_kk'           => $validatedData['no_kk'],

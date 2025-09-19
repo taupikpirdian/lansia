@@ -109,7 +109,7 @@
 </div>
 
 <!-- Main Content -->
-<div class="container my-5">
+{{-- <div class="container my-5">
     <div class="row">
         <div class="col-12 text-center mb-4">
             <h2 class="fw-bold">SISTEM PENGELOLAAN DATA WARGA</h2>
@@ -146,5 +146,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection

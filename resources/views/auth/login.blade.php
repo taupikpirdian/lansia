@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Pendataan Lansia Desa</title>
+    <title>Login</title>
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -72,8 +72,6 @@
       <!-- Left Side -->
       <div class="login-left">
         <div class="login-card">
-          <h4 class="mb-4 fw-bold text-danger" style="color:#e57373 !important;">Pendataan Lansia Desa</h4>
-
           <h2 class="mb-2">Selamat Datang Kembali</h2>
           <p class="text-muted mb-4">Silakan login untuk melanjutkan</p>
 

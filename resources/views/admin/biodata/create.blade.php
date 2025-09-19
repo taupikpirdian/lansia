@@ -99,23 +99,26 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Kecamatan <span class="text-danger">*</span></label>
-                        <select name="kecamatan_id" class="form-select select2" required>
-                            <option value="">-- Pilih Kecamatan --</option>
-                            @foreach($kecamatans as $kecamatan)
-                                <option value="{{ $kecamatan->id }}" {{ old('kecamatan_id', $data->kecamatan_id ?? '') == $kecamatan->id ? 'selected' : '' }}>
-                                    {{ $kecamatan->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Desa <span class="text-danger">*</span></label>
-                        <select name="desa_id" class="form-select select2" required>
-                            <option value="">-- Pilih Desa --</option>
-                        </select>
-                    </div>
+                    {{-- jika admin --}}
+                    @if(Auth::user()->roles->first()->name == 'admin')
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Kecamatan <span class="text-danger">*</span></label>
+                            <select name="kecamatan_id" class="form-select select2" required>
+                                <option value="">-- Pilih Kecamatan --</option>
+                                @foreach($kecamatans as $kecamatan)
+                                    <option value="{{ $kecamatan->id }}" {{ old('kecamatan_id', $data->kecamatan_id ?? '') == $kecamatan->id ? 'selected' : '' }}>
+                                        {{ $kecamatan->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Desa <span class="text-danger">*</span></label>
+                            <select name="desa_id" class="form-select select2" required>
+                                <option value="">-- Pilih Desa --</option>
+                            </select>
+                        </div>
+                    @endif
                     <div class="col-12 mb-3">
                         <label class="form-label">Alamat <span class="text-danger">*</span></label>
                         <textarea name="alamat" class="form-control" required>{{ old('alamat', $data->alamat ?? '') }}</textarea>
